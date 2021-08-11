@@ -5,7 +5,7 @@ This is my nvim configration.It's helpful to me.
 ## vim 快捷键
 | 按键             | 功能                   |
 |------------------|------------------------|
-| <leader>w        | 分屏间切换             |
+| \<leader\>w        | 分屏间切换             |
 | sh               | 列分屏换行分屏         |
 | sv               | 行分屏换列分屏         |
 | srh              | 行分屏旋转             |
@@ -17,7 +17,7 @@ This is my nvim configration.It's helpful to me.
 | tmh              | 当前标签页向左移动     |
 | tml              | 当前标签页向右移动     |
 | \`映射为~        | 自动大写               |
-| <leader><leader> | 匹配占位符并自动编辑   |
+| \<leader\>\<leader\> | 匹配占位符并自动编辑   |
 | r                | 运行程序，目前只有C++  |
 
 ## markdown
