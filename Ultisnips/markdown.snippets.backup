@@ -1,0 +1,110 @@
+global !p
+texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C',
+'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS',
+'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z']]
+
+texIgnoreMathZones = ['texMathText']
+
+texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
+texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
+
+ignore = texIgnoreMathZoneIds[0]
+
+def math():
+    synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
+    try:
+        first = next(
+            i for i in reversed(synstackids)
+            if i in texIgnoreMathZoneIds or i in texMathZoneIds
+        )
+        return first != ignore
+    except StopIteration:
+        return False
+endglobal
+
+# global
+
+snippet sign "say hello"
+@Hello
+@Time: `date +%F`
+@Author: Li-4
+endsnippet
+
+snippet today "Date"
+`date +%F`
+endsnippet
+
+# It would be useful in LaTex, not markdown.
+#snippet box "Box"
+#`!p snip.rv = '┌' + '─' * (len(t[1]) + 2) + '┐'`
+#│ $1 │
+#`!p snip.rv = '└' + '─' * (len(t[1]) + 2) + '┘'`
+#$0
+#endsnippet
+
+# global
+
+
+snippet th "Table Heading"
+| ${1:Key} | ${2:Value} |
+|---|---|
+${0}
+endsnippet
+
+snippet tr "Table Row"
+| ${1:Term} | ${2:Definition} |
+${0}
+endsnippet
+
+# mk 表示 make Ketax
+snippet mk "Math" wA
+$${1}$`!p
+if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
+    snip.rv = ' '
+else:
+    snip.rv = ''
+`$2
+endsnippet
+
+# dm 表示 Display math
+snippet dm "Math" wA
+$$
+${1:${VISUAL}}
+$$ $0
+endsnippet
+
+# 根据用户输入新建一个Markdown格式的表格
+snippet '(?<!\\)([0-9])([0-9])tb' "new table" r
+$1`!p 
+x=match.group(1)
+y=match.group(2)
+row1=""
+row2="" 
+for i in range(int(x)):
+    row1+="| <++> "
+    row2+="|:-:"
+row1+="|\n"
+row2+="|\n"
+out=row1+row2+int(y)*row1
+snip.rv=out
+`$0
+endsnippet
+
+# 在数学模式下自动加下标
+context "math()"
+snippet '([A-Za-z])(\d)' "auto subscript" wrA
+`!p snip.rv = match.group(1)`_`!p snip.rv = match.group(2)`
+endsnippet
+context "math()"
+snippet
+
+endsnippet
+
+
+
+
+
+
+
+
+
