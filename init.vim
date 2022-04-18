@@ -175,6 +175,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'connorholyday/vim-snazzy'
 Plug 'sjl/badwolf'
 Plug 'tomasr/molokai'
+Plug 'dracula/vim', { 'as': 'dracula'}
 
 "vim-table-mode
 Plug 'dhruvasagar/vim-table-mode'
