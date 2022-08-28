@@ -198,5 +198,14 @@ Plug 'mzlogin/vim-markdown-toc'
 let g:vmt_auto_update_on_save = 0
 
 
+
+" coc.nvim
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" let g:coc_global_extensions = [
+"	\ 'coc-vimlsp',
+"	\ 'coc-marketplace']
+
+
+
 " Initialize plugin system
 call plug#end()
