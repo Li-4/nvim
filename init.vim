@@ -29,8 +29,8 @@ noremap B 5b
 noremap = nzz
 noremap - Nzz
 
-map <c-q> :q<CR>
-map <c-s> :w<CR>
+map Q :q<CR>
+map S :w<CR>
 map R :source $MYVIMRC<CR>
 
 "split
