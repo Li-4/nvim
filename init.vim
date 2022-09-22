@@ -13,12 +13,22 @@ set cindent
 set tabstop=4
 set shiftwidth=4
 set showmatch
+set cc=80
 
 set hlsearch
 exec "nohlsearch"
 set ignorecase
 set smartcase
 noremap <LEADER><CR> :nohlsearch<CR>
+
+" 退出插入模式时禁用输入法
+autocmd InsertLeave * :silent !fcitx5-remote -c 
+" 创建 Buf 时禁用输入法
+autocmd BufCreate *  :silent !fcitx5-remote -c 
+" 进入 Buf 时禁用输入法
+autocmd BufEnter *  :silent !fcitx5-remote -c 
+" 离开 Buf 时禁用输入法
+autocmd BufLeave *  :silent !fcitx5-remote -c 
 
 noremap J 5j
 noremap K 5k
@@ -143,6 +153,58 @@ func! CompileRunGcc()
 	endif
 endfunc
 
+"===
+"=== coc.nvim
+"===
+
+set updatetime=100
+set signcolumn=yes
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-o> coc#refresh()
+
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> <leader>- <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>= <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> <c-h> :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+
 
 "===
 "=== Plug
@@ -152,17 +214,17 @@ endfunc
 call plug#begin('~/.config/nvim/plugged')
 
 " Snippet 代码段
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 "设置tab键为触发键
-let g:UltiSnipsExpandTrigger = '<tab>'
+"let g:UltiSnipsExpandTrigger = '<tab>'
 "设置向后跳转键
-let g:UltiSnipsJumpForwardTrigger = '<tab>' 
+"let g:UltiSnipsJumpForwardTrigger = '<tab>' 
 "设置向前跳转键
-let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
+"let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
 "设置文件目录
-let g:UltiSnipsSnippetDirectories=["~/.config/nvim/Ultisnips"]
+"let g:UltiSnipsSnippetDirectories=["~/.config/nvim/Ultisnips"]
 "设置打开配置文件时为垂直打开
-let g:UltiSnipsEditSplit="vertical"
+"let g:UltiSnipsEditSplit="vertical"
 
 
 " On-demand loading 按需加载
@@ -200,10 +262,10 @@ let g:vmt_auto_update_on_save = 0
 
 
 " coc.nvim
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" let g:coc_global_extensions = [
-"	\ 'coc-vimlsp',
-"	\ 'coc-marketplace']
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_global_extensions = [
+	\ 'coc-vimlsp',
+	\ 'coc-marketplace']
 
 
 
