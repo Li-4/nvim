@@ -30,6 +30,8 @@ autocmd BufEnter *  :silent !fcitx5-remote -c
 " 离开 Buf 时禁用输入法
 autocmd BufLeave *  :silent !fcitx5-remote -c 
 
+set fileencodings=utf-8,gb2312,gbk,gb18030
+
 noremap J 5j
 noremap K 5k
 noremap H 0
@@ -248,6 +250,9 @@ Plug 'nathanaelkane/vim-indent-guides'
 " Markdown 
 Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_math = 1
+
+" Markdown-Preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 " Markdown menu
 "安装插件
