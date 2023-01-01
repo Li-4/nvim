@@ -15,6 +15,8 @@ set shiftwidth=4
 set showmatch
 set cc=80
 
+set nofoldenable
+
 set hlsearch
 exec "nohlsearch"
 set ignorecase
@@ -137,7 +139,7 @@ func! CompileRunGcc()
 	elseif &filetype == 'html'
 		silent! exec "!".g:mkdp_browser." % &"
 	elseif &filetype == 'markdown'
-		exec "InstantMarkdownPreview"
+		exec "MarkdownPreview"
 	elseif &filetype == 'tex'
 		silent! exec "VimtexStop"
 		silent! exec "VimtexCompile"
