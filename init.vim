@@ -12,10 +12,19 @@ set scrolloff=5
 set cindent
 set tabstop=4
 set shiftwidth=4
+set expandtab
 set showmatch
 set cc=80
 
+" 括号补全
+inoremap ' ''<ESC>i
+inoremap " ""<ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {<CR>}<ESC>O
+
 set nofoldenable
+set clipboard+=unnamedplus
 
 set hlsearch
 exec "nohlsearch"
@@ -117,14 +126,22 @@ noremap r :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
-		exec "!g++ % -o %<"
-		exec "!time ./%<"
+		set splitbelow
+		:sp
+		:res -4
+		:term gcc -lm % -o %< && time ./%<
 	elseif &filetype == 'cpp'
 		set splitbelow
 		exec "!g++ -std=c++11 % -Wall -o %<"
 		:sp
-		:res -5
+		:res -3
 		:term ./%<
+	elseif &filetype == 'cs'
+		set splitbelow
+		silent! exec "!mcs %"
+		:sp
+		:res -5
+		:term mono %<.exe
 	elseif &filetype == 'java'
 		set splitbelow
 		:sp
@@ -150,6 +167,11 @@ func! CompileRunGcc()
 		set splitbelow
 		:sp
 		:term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
+	elseif &filetype == 'racket'
+		set splitbelow
+		:sp
+		:res -5
+		term racket %
 	elseif &filetype == 'go'
 		set splitbelow
 		:sp
@@ -208,6 +230,23 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
 
 
 "===
@@ -255,6 +294,13 @@ let g:vim_markdown_math = 1
 
 " Markdown-Preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+let g:mkdp_browser = '/usr/bin/microsoft-edge-dev'
+
+" Markdown-Image-Paste
+Plug 'ferrine/md-img-paste.vim'
+autocmd FileType markdown nmap <buffer><silent> <leader>i :call mdip#MarkdownClipboardImage()<CR>
+let g:mdip_imgdir = './img'
+let g:mdip_imgname = 'image'
 
 " Markdown menu
 "安装插件
@@ -265,6 +311,14 @@ Plug 'mzlogin/vim-markdown-toc'
 ":UpdateToc
 "取消储存时自动更新目录
 let g:vmt_auto_update_on_save = 0
+"显示更少的目录层级
+function RToc()
+    exe "/-toc .* -->"
+    let lstart=line('.')
+    exe "/-toc -->"
+    let lnum=line('.')
+    execute lstart.",".lnum."g/           /d"
+endfunction
 
 
 
@@ -273,6 +327,16 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
 	\ 'coc-vimlsp',
 	\ 'coc-marketplace']
+
+
+
+" latex
+Plug 'lervag/vimtex'
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 
 

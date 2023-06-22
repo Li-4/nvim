@@ -1,5 +1,6 @@
 {
 	"coc.preferences.extensionUpdateCheck": "daily",
 	"suggest.noselect": true,
-	"suggest.enablePreselect": false
+  "suggest.enablePreselect": false,
+  "snippets.ultisnips.pythonPrompt": false
 }
